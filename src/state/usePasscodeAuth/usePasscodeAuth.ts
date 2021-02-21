@@ -72,6 +72,12 @@ export default function usePasscodeAuth() {
   useEffect(() => {
     const passcode = getPasscode();
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const userName = urlParams.get('userName') || '';
+    const team = urlParams.get('teamId') || '';
+    window.sessionStorage.setItem('user', userName);
+    window.sessionStorage.setItem('room', team);
+
     if (passcode) {
       verifyPasscode(passcode)
         .then(verification => {

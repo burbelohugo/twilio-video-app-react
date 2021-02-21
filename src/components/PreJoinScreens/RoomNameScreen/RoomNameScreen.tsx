@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent } from 'react';
+import React, { ChangeEvent, FormEvent, useEffect } from 'react';
 import { Typography, makeStyles, TextField, Grid, Button, InputLabel, Theme } from '@material-ui/core';
 import { useAppState } from '../../../state';
 
@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     [theme.breakpoints.down('sm')]: {
       width: '100%',
     },
+    marginTop: '1.5rem',
   },
 }));
 
@@ -38,6 +39,15 @@ interface RoomNameScreenProps {
 export default function RoomNameScreen({ name, roomName, setName, setRoomName, handleSubmit }: RoomNameScreenProps) {
   const classes = useStyles();
   const { user } = useAppState();
+
+  useEffect(() => {
+    const URLRoomName = window.sessionStorage.getItem('room') || '';
+
+    const URLUserName = window.sessionStorage.getItem('user') || '';
+
+    setName(URLUserName);
+    setRoomName(URLRoomName);
+  });
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -54,51 +64,10 @@ export default function RoomNameScreen({ name, roomName, setName, setRoomName, h
       <Typography variant="h5" className={classes.gutterBottom}>
         Join a Room
       </Typography>
-      <Typography variant="body1">
-        {hasUsername
-          ? "Enter the name of a room you'd like to join."
-          : "Enter your name and the name of a room you'd like to join"}
-      </Typography>
+      <Typography variant="body1">Click continue to join the private video call for your team.</Typography>
       <form onSubmit={handleSubmit}>
-        <div className={classes.inputContainer}>
-          {!hasUsername && (
-            <div className={classes.textFieldContainer}>
-              <InputLabel shrink htmlFor="input-user-name">
-                Your Name
-              </InputLabel>
-              <TextField
-                id="input-user-name"
-                variant="outlined"
-                fullWidth
-                size="small"
-                value={name}
-                onChange={handleNameChange}
-              />
-            </div>
-          )}
-          <div className={classes.textFieldContainer}>
-            <InputLabel shrink htmlFor="input-room-name">
-              Room Name
-            </InputLabel>
-            <TextField
-              autoCapitalize="false"
-              id="input-room-name"
-              variant="outlined"
-              fullWidth
-              size="small"
-              value={roomName}
-              onChange={handleRoomNameChange}
-            />
-          </div>
-        </div>
-        <Grid container justify="flex-end">
-          <Button
-            variant="contained"
-            type="submit"
-            color="primary"
-            disabled={!name || !roomName}
-            className={classes.continueButton}
-          >
+        <Grid container justify="center">
+          <Button variant="contained" type="submit" color="primary" className={classes.continueButton}>
             Continue
           </Button>
         </Grid>
